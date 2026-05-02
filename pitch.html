@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What We Don't Say — Montessori de Manila · Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Instrument+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* ── RESET ─── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+/* ── VARS ─── */
+:root {
+  --white:  #FAFAF8;
+  --paper:  #F0EDE8;
+  --navy:   #0D1B3E;
+  --dark:   #111D35;
+  --blue:   #1D4ED8;
+  --pale:   #DBEAFE;
+  --red:    #C8202A;
+  --ink:    #1C1C1C;
+  --muted:  #6B6B6B;
+  --rule:   #D8D4CA;
+  --ease:   cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ── GRAIN ─── */
+body::before {
+  content:'';
+  position:fixed; inset:-100px;
+  z-index:9990; pointer-events:none; opacity:0.038;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;
+  animation:grain 8s steps(8) infinite;
+}
+@keyframes grain {
+  0%{transform:translate(0,0)} 12%{transform:translate(-3%,-4%)}
+  25%{transform:translate(-8%,3%)} 37%{transform:translate(5%,-6%)}
+  50%{transform:translate(-4%,6%)} 62%{transform:translate(-9%,2%)}
+  75%{transform:translate(7%,-2%)} 87%{transform:translate(2%,5%)}
+}
+
+/* ── SCROLL REVEAL ─── */
+.rv { opacity:0; transform:translateY(24px); transition:opacity 0.72s var(--ease), transform 0.72s var(--ease); }
+.rv.in { opacity:1; transform:none; }
+.d1{transition-delay:.07s} .d2{transition-delay:.14s} .d3{transition-delay:.21s}
+.d4{transition-delay:.28s} .d5{transition-delay:.35s} .d6{transition-delay:.44s}
+
+/* ── BASE ─── */
+body {
+  font-family:'Instrument Sans', sans-serif;
+  background:var(--white); color:var(--ink);
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+
+/* ── SHARED SECTION ─── */
+section { padding:clamp(80px,10vw,116px) clamp(36px,9vw,108px); }
+
+.sm {
+  font-size:9px; font-weight:700;
+  letter-spacing:4px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:44px;
+  display:flex; align-items:center; gap:14px;
+}
+.sm::after { content:''; flex:1; max-width:44px; height:1.5px; background:var(--rule); }
+
+h2 {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(34px,4.2vw,58px); font-weight:900; line-height:1.06;
+  letter-spacing:-1.5px; color:var(--navy); max-width:760px; margin-bottom:36px;
+}
+h2 em { font-style:italic; color:var(--blue); }
+
+h3 {
+  font-family:'Playfair Display', serif;
+  font-size:19px; font-weight:700; color:var(--navy); margin-bottom:10px; line-height:1.2;
+}
+
+.bt { font-size:15.5px; line-height:1.82; color:#3A3A3A; max-width:660px; }
+.bt + .bt { margin-top:18px; }
+
+/* ── COVER ─── */
+.cover {
+  min-height:100vh; background:var(--white);
+  border-bottom:2px solid var(--navy);
+  padding:clamp(52px,8vw,108px) clamp(36px,9vw,108px);
+  display:flex; flex-direction:column; justify-content:space-between;
+  position:relative; overflow:hidden;
+}
+.cover::before, .cover::after {
+  content:''; position:absolute; top:0; bottom:0;
+  width:1px; background:rgba(13,27,62,0.05); pointer-events:none;
+}
+.cover::before { left:33.33%; }
+.cover::after  { left:66.66%; }
+
+.cov-top { display:flex; justify-content:space-between; align-items:flex-start; }
+.cov-org, .cov-type {
+  font-size:10px; font-weight:600; letter-spacing:3.5px; text-transform:uppercase; color:var(--muted);
+}
+.cov-type { text-align:right; }
+
+.cov-mid { padding:68px 0 52px; }
+.cov-eye { display:flex; align-items:center; gap:14px; margin-bottom:32px; }
+.cov-eye-line { width:40px; height:2px; background:var(--red); flex-shrink:0; }
+.cov-eye span { font-size:10px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--red); }
+
+.cover h1 {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(56px,8vw,120px); font-weight:900; line-height:0.88;
+  color:var(--navy); letter-spacing:-3px; max-width:840px;
+}
+.cover h1 em { font-style:italic; color:var(--blue); display:block; }
+
+.cov-tag { margin-top:36px; font-size:15.5px; line-height:1.82; color:var(--muted); max-width:480px; }
+
+.cov-bot {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-top:1.5px solid var(--rule); padding-top:28px; gap:36px;
+}
+.cov-meta label {
+  display:block; font-size:9px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-bottom:7px;
+}
+.cov-meta p { font-size:14px; font-weight:500; color:var(--navy); line-height:1.5; }
+
+/* ── VISION ─── */
+.vision { background:var(--dark); }
+.vision .sm { color:rgba(255,255,255,0.25); }
+.vision .sm::after { background:rgba(255,255,255,0.09); }
+.vision h2 { color:#fff; }
+.vision h2 em { color:#93C5FD; }
+.vision .bt { color:rgba(255,255,255,0.48); max-width:660px; }
+
+.vis-grid { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+
+.vis-pull { border-left:3px solid var(--red); padding-left:28px; margin-top:48px; }
+.vis-pull p {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(18px,2vw,25px); font-style:italic; color:#fff; line-height:1.55;
+}
+
+.vis-right { padding-top:6px; display:flex; flex-direction:column; gap:24px; }
+
+.vis-ref { border:1px solid rgba(255,255,255,0.08); padding:24px 26px; margin-top:4px; }
+.vis-ref-label {
+  font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
+  color:rgba(255,255,255,0.24); margin-bottom:9px; display:block;
+}
+.vis-ref p { font-size:13px; line-height:1.72; color:rgba(255,255,255,0.36); }
+
+/* ── CHAPTERS ─── */
+.chapters { background:var(--paper); border-top:2px solid var(--navy); }
+
+.ch-cols {
+  display:grid; grid-template-columns:1fr 1fr;
+  margin-top:48px; border:2px solid var(--navy); border-bottom:none;
+}
+.ch-col-hd {
+  padding:14px 28px; display:flex; align-items:center; gap:10px;
+  border-right:2px solid var(--navy);
+}
+.ch-col-hd:last-child { border-right:none; }
+.ch-col-pip { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.ch-col-pip.b { background:var(--blue); }
+.ch-col-pip.r { background:var(--red); }
+.ch-col-hd span { font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase; }
+.ch-col-hd.b span { color:var(--blue); }
+.ch-col-hd.r span { color:var(--red); }
+
+.chs-grid { display:grid; grid-template-columns:1fr 1fr; border:2px solid var(--navy); border-top:none; }
+
+.ch-card {
+  position:relative; overflow:hidden; padding:48px 44px;
+  border-right:2px solid var(--navy); border-bottom:2px solid var(--navy);
+  transition:box-shadow 0.3s; cursor:default;
+}
+.ch-card:nth-child(even) { border-right:none; }
+.ch-card:nth-child(5), .ch-card:nth-child(6) { border-bottom:none; }
+
+.ch-card::before {
+  content:''; position:absolute; inset:0;
+  transform:scaleY(0); transform-origin:bottom;
+  transition:transform 0.5s var(--ease); z-index:0;
+}
+.b-card::before { background:var(--blue); }
+.r-card::before { background:var(--red); }
+.ch-card:hover::before { transform:scaleY(1); }
+.ch-card > * { position:relative; z-index:1; }
+
+.ch-n {
+  font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:16px; display:block; transition:color 0.32s;
+}
+.ch-card:hover .ch-n { color:rgba(255,255,255,0.38); }
+
+.ch-title {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(48px,5vw,72px); font-weight:900; line-height:0.9;
+  display:block; margin-bottom:20px; letter-spacing:-2px; transition:color 0.32s;
+}
+.b-card .ch-title { color:var(--blue); }
+.r-card .ch-title { color:var(--red); }
+.ch-card:hover .ch-title { color:rgba(255,255,255,0.96); }
+
+.ch-line {
+  font-family:'Playfair Display', serif;
+  font-size:13.5px; font-style:italic; color:var(--navy); line-height:1.5;
+  margin-bottom:14px; transition:color 0.32s;
+}
+.ch-card:hover .ch-line { color:rgba(255,255,255,0.68); }
+
+.ch-desc { font-size:13px; line-height:1.7; color:var(--muted); transition:color 0.32s; }
+.ch-card:hover .ch-desc { color:rgba(255,255,255,0.55); }
+
+/* ── SURVEY ─── */
+.survey { background:var(--white); border-top:2px solid var(--navy); }
+
+.surv-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:2px; border:2px solid var(--navy); margin-top:52px; background:var(--navy);
+}
+.surv-blk { background:var(--white); padding:40px 36px; }
+.surv-blk-lbl {
+  font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
+  color:var(--red); margin-bottom:16px; display:block;
+}
+.surv-blk h3 { font-size:18px; margin-bottom:12px; }
+.surv-blk p { font-size:13.5px; line-height:1.75; color:#4A4A4A; margin-bottom:12px; }
+.surv-blk p:last-child { margin-bottom:0; }
+
+.q-list { list-style:none; margin-top:8px; }
+.q-list li {
+  font-size:13px; color:#3A3A3A;
+  padding:9px 0 9px 20px; border-bottom:1px solid var(--rule);
+  position:relative; line-height:1.52;
+}
+.q-list li:last-child { border-bottom:none; }
+.q-list li::before { content:'→'; position:absolute; left:0; color:var(--blue); font-size:10px; top:11px; }
+
+/* ── DESIGN ─── */
+.design { background:var(--paper); border-top:2px solid var(--navy); }
+
+.palette {
+  display:flex; height:60px; border:2px solid var(--navy); overflow:hidden;
+  max-width:520px; margin:36px 0 52px;
+}
+.swatch {
+  flex:1; display:flex; align-items:flex-end;
+  padding:7px 9px; border-right:1px solid rgba(0,0,0,0.07);
+}
+.swatch:last-child { border-right:none; }
+.swatch label { font-size:8px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; }
+
+.design-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; border:2px solid var(--navy); background:var(--navy); }
+.d-feat { background:var(--white); padding:40px 36px; }
+.d-marker {
+  font-size:9px; font-weight:700; letter-spacing:3px; color:var(--blue);
+  text-transform:uppercase; margin-bottom:14px; display:flex; align-items:baseline; gap:9px;
+}
+.d-abbr {
+  font-family:'Playfair Display', serif; font-size:22px; font-weight:900;
+  color:var(--navy); line-height:1; letter-spacing:-0.5px; display:inline-block;
+}
+.d-abbr.r { color:var(--red); }
+.d-feat h3 { font-size:17px; margin-bottom:11px; }
+.d-feat p { font-size:13.5px; line-height:1.75; color:#4A4A4A; }
+
+/* ── PREVIEW + STATS ─── */
+.dark-section {
+  background:var(--dark);
+  padding:clamp(80px,10vw,116px) clamp(36px,9vw,108px);
+}
+.dark-section .sm { color:rgba(255,255,255,0.25); }
+.dark-section .sm::after { background:rgba(255,255,255,0.09); }
+.dark-section h2 { color:#fff; }
+.dark-section h2 em { color:#93C5FD; }
+
+.mw {
+  margin-top:44px; border:1.5px solid rgba(255,255,255,0.09);
+  max-width:920px; overflow:hidden;
+  transition:transform 0.5s var(--ease), box-shadow 0.5s;
+}
+.mw:hover { transform:translateY(-5px); box-shadow:0 28px 72px rgba(0,0,0,0.38); }
+.mw-bar {
+  background:rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:10px 18px; display:flex; align-items:center; gap:6px;
+}
+.mdot { width:9px; height:9px; border-radius:50%; }
+.mdot.r{background:#FF5F57} .mdot.y{background:#FFBD2E} .mdot.g{background:#28C840}
+.murl {
+  margin-left:12px; background:rgba(255,255,255,0.05); border-radius:3px; padding:3px 12px;
+  font-size:10px; color:rgba(255,255,255,0.25); flex:1; max-width:320px;
+}
+.mscreen {
+  background:var(--white); height:340px;
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+}
+.mscreen-bg1 { position:absolute; left:0;top:0;bottom:0; width:43%; background:var(--pale); opacity:0.45; }
+.mscreen-bg2 { position:absolute; left:40%;top:0;bottom:0; width:4%; background:var(--blue); opacity:0.18; }
+.mscreen-bg3 {
+  position:absolute; bottom:0; right:56px; width:240px; height:140px; background:var(--red); opacity:0.07;
+  clip-path:polygon(0 50%,100% 0,100% 100%,0 100%);
+}
+.mscreen-nav { position:absolute; top:16px; left:50%; transform:translateX(-50%); display:flex; gap:7px; align-items:center; }
+.mn { width:6px; height:6px; border-radius:50%; background:rgba(13,27,62,0.14); }
+.mn.on { background:var(--navy); width:18px; border-radius:7px; }
+.mscreen-word { font-family:'Playfair Display', serif; font-size:88px; font-weight:900; color:var(--navy); letter-spacing:-2px; position:relative; z-index:1; }
+.mscreen-btn {
+  position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+  border:1.5px solid var(--navy); padding:8px 24px; font-size:9px; font-weight:700;
+  letter-spacing:2.5px; text-transform:uppercase; color:var(--navy); border-radius:100px; white-space:nowrap; z-index:1;
+}
+.minner { background:var(--white); padding:48px 64px; }
+.mch-lbl { font-size:9px; font-weight:700; letter-spacing:3.5px; text-transform:uppercase; color:var(--muted); margin-bottom:32px; }
+.mquo { margin-bottom:40px; }
+.mquo-mark { font-family:'Playfair Display', serif; font-size:100px; line-height:0.6; color:var(--pale); display:block; margin-bottom:-12px; margin-left:-5px; user-select:none; }
+.mquo-text { font-family:'Playfair Display', serif; font-size:clamp(17px,1.9vw,24px); font-style:italic; color:var(--navy); line-height:1.55; max-width:580px; }
+.mquo-attr { font-size:10px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-top:18px; padding-top:14px; border-top:1px solid var(--rule); display:inline-block; }
+
+.stats-row { display:flex; gap:56px; margin-top:44px; flex-wrap:wrap; }
+.stat-blk { max-width:240px; }
+.stat-track { height:2px; background:var(--pale); margin-bottom:18px; position:relative; overflow:hidden; }
+.stat-fill { position:absolute; left:0;top:0;bottom:0; background:var(--blue); transition:width 1.5s var(--ease); }
+.stat-fill.r { background:var(--red); }
+.stat-num { font-family:'Playfair Display', serif; font-size:56px; font-weight:900; line-height:1; letter-spacing:-2px; color:var(--blue); display:block; margin-bottom:9px; }
+.stat-num.r { color:var(--red); }
+.stat-desc { font-size:12.5px; line-height:1.62; color:var(--muted); }
+
+.stat-cells { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); margin-top:72px; }
+.stat-cell { background:var(--dark); padding:44px 36px; border-right:1px solid rgba(255,255,255,0.05); }
+.stat-cell:last-child { border-right:none; }
+.sc-track { height:2px; background:rgba(255,255,255,0.07); margin-bottom:24px; position:relative; overflow:hidden; }
+.sc-fill { position:absolute; left:0;top:0;bottom:0; background:var(--blue); transition:width 1.5s var(--ease); }
+.sc-fill.r { background:var(--red); }
+.sc-num { font-family:'Playfair Display', serif; font-size:64px; font-weight:900; line-height:0.9; letter-spacing:-2px; color:#fff; display:block; margin-bottom:16px; }
+.sc-num .u { font-size:32px; letter-spacing:0; vertical-align:middle; }
+.sc-num.bn { color:#93C5FD; }
+.sc-num.rn { color:#FCA5A5; }
+.sc-lbl { font-size:12.5px; line-height:1.62; color:rgba(255,255,255,0.38); max-width:210px; }
+.stat-note { margin-top:36px; font-size:10.5px; color:rgba(255,255,255,0.18); letter-spacing:0.5px; font-style:italic; }
+
+/* ── TIMELINE ─── */
+.timeline { background:var(--white); border-top:2px solid var(--navy); }
+.tl-note { font-size:13px; font-style:italic; color:var(--muted); margin-top:-16px; margin-bottom:56px; border-left:3px solid var(--red); padding-left:16px; }
+
+.tl-wrap { position:relative; margin-top:0; }
+.tl-wrap::before {
+  content:''; position:absolute; left:167px; top:7px; bottom:56px;
+  width:2px; background:var(--navy); z-index:0;
+}
+.tl-item { display:grid; grid-template-columns:148px 40px 1fr; padding-bottom:48px; position:relative; }
+.tl-item:last-child { padding-bottom:0; }
+.tl-date { font-size:9.5px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-align:right; padding-right:20px; padding-top:4px; line-height:1.5; }
+.tl-item.ms .tl-date { color:var(--red); }
+.tl-dot-col { display:flex; justify-content:center; align-items:flex-start; padding-top:4px; position:relative; z-index:2; }
+.tl-dot { width:12px; height:12px; border-radius:50%; background:var(--white); border:2.5px solid var(--navy); flex-shrink:0; }
+.tl-item.ms .tl-dot { background:var(--red); border-color:var(--red); width:14px; height:14px; margin-top:-1px; }
+.tl-body { padding-left:20px; }
+.tl-body h3 { font-size:18px; margin-bottom:7px; }
+.tl-body p { font-size:13.5px; line-height:1.75; color:#4A4A4A; max-width:540px; }
+
+/* ── ROLES ─── */
+.roles { background:var(--paper); border-top:2px solid var(--navy); }
+.roles-grid { display:grid; grid-template-columns:repeat(4,1fr); border:2px solid var(--navy); margin-top:52px; }
+.role-card { padding:36px 28px; border-right:2px solid var(--navy); transition:background 0.22s; }
+.role-card:last-child { border-right:none; }
+.role-card:hover { background:rgba(13,27,62,0.04); }
+.role-tag { font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--blue); margin-bottom:10px; display:block; }
+.role-card h3 { font-size:16px; margin-bottom:14px; }
+.role-card ul { list-style:none; }
+.role-card ul li { font-size:12.5px; color:#4A4A4A; padding:5px 0 5px 14px; position:relative; border-bottom:1px solid var(--rule); line-height:1.48; }
+.role-card ul li:last-child { border-bottom:none; }
+.role-card ul li::before { content:'–'; position:absolute; left:0; color:var(--red); }
+
+/* ── ADMIN PITCH ─── */
+.admin { background:var(--white); border-top:2px solid var(--navy); }
+.pitch-cols { display:grid; grid-template-columns:1fr 2fr; gap:72px; align-items:start; margin-top:52px; }
+.pitch-left h3 { font-size:18px; margin-bottom:12px; }
+.pitch-left p { font-size:13px; line-height:1.7; color:var(--muted); }
+.pitch-text { font-size:15px; line-height:1.88; color:#2A2A2A; }
+.pitch-text p { margin-bottom:22px; }
+.pitch-text p:last-child { margin-bottom:0; }
+.pitch-text strong { font-weight:600; color:var(--navy); }
+
+/* ── RISK ─── */
+.risk { background:var(--paper); border-top:2px solid var(--navy); }
+.risk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--navy); border:2px solid var(--navy); margin-top:52px; }
+.risk-card { background:var(--white); padding:32px 28px; border-top:4px solid transparent; transition:background 0.22s, transform 0.28s; }
+.risk-card:hover { background:#FAFAF7; transform:translateY(-3px); }
+.risk-card.fl { border-top-color:var(--red); }
+.risk-card.ch { border-top-color:var(--blue); }
+.risk-lbl { font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px; display:block; }
+.risk-lbl.fl { color:var(--red); }
+.risk-lbl.ch { color:var(--blue); }
+.risk-card h3 { font-size:16px; margin-bottom:10px; }
+.risk-card p { font-size:13px; line-height:1.7; color:#4A4A4A; }
+
+/* ── FOOTER ─── */
+footer {
+  background:var(--dark);
+  padding:clamp(52px,6vw,88px) clamp(36px,9vw,108px);
+  display:grid; grid-template-columns:1fr auto;
+  align-items:end; gap:36px; position:relative; overflow:hidden;
+}
+footer::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg, var(--red) 0%, var(--blue) 100%);
+}
+.ft-title { font-family:'Playfair Display', serif; font-size:clamp(30px,3.8vw,50px); font-weight:900; letter-spacing:-1.5px; color:#fff; line-height:1; display:block; margin-bottom:18px; }
+.ft-title em { font-style:italic; color:#93C5FD; }
+.ft-title .stop { color:var(--red); }
+.ft-sub { font-size:12.5px; color:rgba(255,255,255,0.28); line-height:1.7; max-width:400px; }
+.ft-meta { text-align:right; }
+.ft-meta p { font-size:10px; font-weight:500; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.25); line-height:2.1; }
+.ft-meta .small { font-size:9.5px; color:rgba(255,255,255,0.14); margin-top:14px; letter-spacing:0.5px; font-style:italic; font-weight:400; text-transform:none; }
+
+/* ── RESPONSIVE ─── */
+@media (max-width:960px) {
+  .vis-grid, .pitch-cols { grid-template-columns:1fr; gap:40px; }
+  .roles-grid { grid-template-columns:1fr 1fr; }
+  .role-card:nth-child(even) { border-right:none; }
+  .role-card:nth-child(n+3) { border-top:2px solid var(--navy); }
+  .risk-grid, .stat-cells { grid-template-columns:1fr; }
+  footer { grid-template-columns:1fr; }
+  .ft-meta { text-align:left; }
+  .minner { padding:36px 40px; }
+  .tl-wrap::before { left:111px; }
+  .tl-item { grid-template-columns:108px 40px 1fr; }
+}
+@media (max-width:700px) {
+  section { padding:56px 22px; }
+  .cover { padding:44px 22px; }
+  .cov-bot { grid-template-columns:1fr 1fr; gap:20px; }
+  .chs-grid, .surv-grid, .design-grid, .ch-cols { grid-template-columns:1fr; }
+  .ch-card { border-right:none !important; }
+  .ch-col-hd { border-right:none !important; }
+  .ch-card:nth-child(5) { border-bottom:2px solid var(--navy) !important; }
+  .roles-grid { grid-template-columns:1fr; }
+  .role-card { border-right:none; border-bottom:2px solid var(--navy); }
+  .tl-wrap::before { left:15px; top:7px; }
+  .tl-item { grid-template-columns:0 30px 1fr; }
+  .tl-date { display:none; }
+  .stats-row { gap:40px; }
+  .stat-cells { grid-template-columns:1fr; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  body::before { animation:none; }
+  .rv { opacity:1; transform:none; transition:none; }
+  .ch-card::before, .mw { transition:none; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover" id="cover">
+  <div class="cov-top">
+    <span class="cov-org">MDM Secondary Student Council × Montessorian Scribes</span>
+    <span class="cov-type">Project Proposal<br>SY 2026–2027</span>
+  </div>
+  <div class="cov-mid">
+    <div class="cov-eye">
+      <div class="cov-eye-line"></div>
+      <span>Student Literary &amp; Mental Health Initiative</span>
+    </div>
+    <h1>What We<br><em>Don't Say.</em></h1>
+    <p class="cov-tag">An anonymous student survey across six emotional themes, compiled into a curated literary website that documents student experience in a school setting.</p>
+  </div>
+  <div class="cov-bot">
+    <div class="cov-meta"><label>Project Type</label><p>Survey + Web Publication</p></div>
+    <div class="cov-meta"><label>Lead Organizations</label><p>MDM Secondary Student Council &amp; Montessori Scribes</p></div>
+    <div class="cov-meta"><label>Survey Launch</label><p>May 2026<br>Mental Health Month</p></div>
+    <div class="cov-meta"><label>Site Launch</label><p>July 2026<br>MDM Student Body</p></div>
+  </div>
+</div>
+
+<!-- VISION -->
+<section class="vision" id="vision">
+  <p class="sm rv">01 &nbsp;— &nbsp;Vision</p>
+  <div class="vis-grid">
+    <div>
+      <h2 class="rv d1">Most of it <em>goes unspoken.</em></h2>
+      <p class="bt rv d2">Students do not always say what they are experiencing, especially in school settings where they are expected to remain composed and continue functioning normally.</p>
+      <p class="bt rv d3">This project is designed to give students a safe, structured way to share concerns that are often left unspoken. It will use an anonymous survey organized around six emotional themes, then present selected responses in a curated website written and built by students.</p>
+      <p class="bt rv d4">The purpose is not only expression, but documentation: to identify recurring concerns, show how students describe them in their own words, and create a school-based record that can support future wellness efforts.</p>
+      <div class="vis-pull rv d5">
+        <p>"A documented record of what students carry — written in their own words, preserved beyond a single school year."</p>
+      </div>
+    </div>
+    <div class="vis-right">
+      <p class="bt rv d2">School wellness initiatives are often temporary. Posters are taken down, and seminars conclude after a set period. A published website offers a more durable output — one that can be accessed, shared, and revisited by future students. It serves as a documented record of student experience at Montessori de Manila, based on accounts written by the students themselves.</p>
+      <p class="bt rv d3">The project is led by the MDM Secondary Student Council, with welfare oversight from the guidance counselor at every stage. The survey will run in May, editorial work will take place in June, and the website will launch in July for the full Grades 7–12 student body.</p>
+      <div class="vis-ref rv d4">
+        <span class="vis-ref-label">Reference</span>
+        <p>The structural reference for this project is <em>Inside the Head</em> by Chloé Fleury (2019), an anonymous submission-based website organized into visual chapters. We are adapting the format for Montessori de Manila, while keeping the content, visual identity, and editorial voice original.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTERS -->
+<section class="chapters" id="chapters">
+  <p class="sm rv">02 &nbsp;— &nbsp;Website Chapters</p>
+  <h2 class="rv d1">Six themes.<br><em>One collective portrait.</em></h2>
+  <p class="bt rv d2">The website will function as a scroll-based anthology. Each chapter begins with a full-screen visual title and expands into curated student writing. The six themes were selected because they reflect recurring concerns students raise in school contexts, including academic pressure, family expectations, identity, uncertainty, and social isolation.</p>
+
+  <div class="ch-cols rv d3">
+    <div class="ch-col-hd b"><div class="ch-col-pip b"></div><span>Blue — reaching toward</span></div>
+    <div class="ch-col-hd r"><div class="ch-col-pip r"></div><span>Red — what pushes back</span></div>
+  </div>
+
+  <div class="chs-grid">
+    <div class="ch-card b-card rv d1">
+      <span class="ch-n">Ch. 01</span>
+      <span class="ch-title">Pressure</span>
+      <p class="ch-line">"I was okay with my grades until I heard what everyone else got."</p>
+      <p class="ch-desc">This chapter focuses on academic pressure and performance expectations. Many students experience school as a constant comparison between what is required and what they feel they must prove. Sustained pressure affects concentration, sleep, confidence, and willingness to ask for help.</p>
+    </div>
+    <div class="ch-card r-card rv d2">
+      <span class="ch-n">Ch. 02</span>
+      <span class="ch-title">Home</span>
+      <p class="ch-line">"They don't say anything when I mess up, but I can tell they expected better."</p>
+      <p class="ch-desc">This chapter addresses tension between family expectations and personal identity. Some students carry guilt, responsibility, or fear of disappointing the people closest to them — pressure that affects emotional stability, participation, and self-expression in school.</p>
+    </div>
+    <div class="ch-card b-card rv d3">
+      <span class="ch-n">Ch. 03</span>
+      <span class="ch-title">Longing</span>
+      <p class="ch-line">"I typed it out three times and still didn't send it."</p>
+      <p class="ch-desc">This chapter examines private emotional life, including attachment, unspoken feelings, and the difficulty of naming what a student feels toward another person. Students often keep these experiences hidden, even when they shape daily behavior and relationships.</p>
+    </div>
+    <div class="ch-card r-card rv d4">
+      <span class="ch-n">Ch. 04</span>
+      <span class="ch-title">After</span>
+      <p class="ch-line">"Everyone keeps asking what course I'm taking. I don't even know what I'm good at."</p>
+      <p class="ch-desc">This chapter addresses uncertainty about the future. For many students, the concern is not only exam performance, but the pressure to know what comes next before they feel ready. This section documents anxiety about direction, identity, and expectations after graduation.</p>
+    </div>
+    <div class="ch-card b-card rv d5">
+      <span class="ch-n">Ch. 05</span>
+      <span class="ch-title">Self</span>
+      <p class="ch-line">"I act different depending on who I'm with, and I don't know which one people think is me."</p>
+      <p class="ch-desc">This chapter explores identity under repetition. Students are often described by labels formed early in school life, even after they have changed. School environments can either allow growth or keep students fixed inside outdated perceptions.</p>
+    </div>
+    <div class="ch-card r-card rv d6">
+      <span class="ch-n">Ch. 06</span>
+      <span class="ch-title">Alone</span>
+      <p class="ch-line">"I'm always with people, but I still feel like I don't belong anywhere."</p>
+      <p class="ch-desc">This chapter addresses emotional invisibility and social isolation in familiar environments. A student can be physically present, socially active, and still feel unseen. Loneliness in school is often quiet, but it has real effects on belonging, participation, and well-being.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SURVEY -->
+<section class="survey" id="survey">
+  <p class="sm rv">03 &nbsp;— &nbsp;The Survey</p>
+  <h2 class="rv d1">Anonymous by design.<br><em>Clear by purpose.</em></h2>
+  <p class="bt rv d2">The survey begins with a short explanation of the project and a consent checkbox. It then moves through six sections, one for each chapter. Each section contains five to ten questions, combining open-ended responses with optional scale items. The full form will contain approximately 30 to 60 questions and will be distributed through Google Forms during a free period so students can respond at their own pace.</p>
+
+  <div class="surv-grid">
+    <div class="surv-blk rv d1">
+      <span class="surv-blk-lbl">Form Architecture</span>
+      <h3>How it works</h3>
+      <p>The survey is designed to collect meaningful student responses without forcing them into one way of answering. Each chapter begins with a short framing line that identifies the topic while still leaving room for personal interpretation. Open-ended responses will remain the primary format.</p>
+      <p>The survey will not collect names, email addresses, or account sign-ins. It is designed to be appropriate for Grades 7–12, with wording reviewed for clarity, emotional safety, and age accessibility. A safe-space note, prepared with the guidance counselor, will appear at the top and bottom of the form.</p>
+    </div>
+    <div class="surv-blk rv d2">
+      <span class="surv-blk-lbl">Sample Questions — Per Chapter</span>
+      <h3>What we're asking</h3>
+      <ul class="q-list">
+        <li><strong>Pressure —</strong> "What part of school stresses you out the most during a normal week?"</li>
+        <li><strong>Home —</strong> "What expectation from home affects you the most as a student?"</li>
+        <li><strong>Longing —</strong> "What is something you wish you could say to someone but haven't?"</li>
+        <li><strong>After —</strong> "What about your future feels most uncertain to you right now?"</li>
+        <li><strong>Self —</strong> "What part of yourself do you feel people at school don't really see?"</li>
+        <li><strong>Alone —</strong> "When do you feel most disconnected from other people at school?"</li>
+      </ul>
+    </div>
+    <div class="surv-blk rv d3">
+      <span class="surv-blk-lbl">Optional Quantitative Layer</span>
+      <h3>Scale &amp; multiple-choice items</h3>
+      <ul class="q-list">
+        <li>How often do you feel stressed because of schoolwork? (Never / Rarely / Sometimes / Often / Always)</li>
+        <li>How much pressure do you feel from your family regarding school? (None / Low / Moderate / High / Very High)</li>
+        <li>How often do you hold back what you want to say to someone? (Never / Rarely / Sometimes / Often / Always)</li>
+        <li>How confident are you about your future plans? (Not at all / Slightly / Moderately / Very / Extremely)</li>
+        <li>Do you feel labeled or judged based on past behavior? (Yes / Sometimes / No)</li>
+        <li>How often do you feel alone at school? (Never / Rarely / Sometimes / Often / Always)</li>
+      </ul>
+    </div>
+    <div class="surv-blk rv d4">
+      <span class="surv-blk-lbl">Ethics Protocol</span>
+      <h3>Consent, anonymity, welfare</h3>
+      <ul class="q-list">
+        <li>No names or email addresses will be collected. Only grade level information will be recorded.</li>
+        <li>An explicit consent checkbox is required before answering the survey.</li>
+        <li>The guidance counselor reviews all questions before release.</li>
+        <li>The guidance counselor will monitor responses for any signs of distress or need for intervention.</li>
+        <li>Any response that could identify a student will not be published.</li>
+        <li>The admin will receive a full website preview before launch.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN -->
+<section class="design" id="design">
+  <p class="sm rv">04 &nbsp;— &nbsp;Website Design</p>
+  <h2 class="rv d1">A website that supports <br><em>readability, clarity, and accessibility.</em></h2>
+  <p class="bt rv d2">White will serve as the dominant background to keep the site open and readable. Navy will function as the structural color. Blue will mark chapters associated with movement, reflection, or reaching forward. Red will mark chapters associated with pressure, strain, or conflict.</p>
+
+  <div class="palette rv d3">
+    <div class="swatch" style="background:#FAFAF8;"><label style="color:#111;">White</label></div>
+    <div class="swatch" style="background:#0D1B3E;"><label style="color:rgba(255,255,255,0.6);">Navy</label></div>
+    <div class="swatch" style="background:#1D4ED8;"><label style="color:#fff;">Blue</label></div>
+    <div class="swatch" style="background:#DBEAFE;"><label style="color:#0D1B3E;">Pale</label></div>
+    <div class="swatch" style="background:#C8202A;"><label style="color:#fff;">Red</label></div>
+  </div>
+
+  <div class="design-grid">
+    <div class="d-feat rv d1">
+      <div class="d-marker"><span class="d-abbr">Aa</span> Typography</div>
+      <h3>Playfair Display + Instrument Sans</h3>
+      <p>Playfair Display will be used for chapter titles and pull quotes. Instrument Sans will be used for labels, captions, navigation, and body copy. The contrast is intentional — one typeface gives the site weight and presence, the other supports clarity and readability.</p>
+    </div>
+    <div class="d-feat rv d2">
+      <div class="d-marker"><span class="d-abbr">Il.</span> Illustration</div>
+      <h3>Flat, abstract, faceless figures</h3>
+      <p>Each chapter will include one full-bleed illustration built from flat, abstract, faceless figures. The illustrations are meant to express the emotional tone of each chapter without identifying or personalizing any student.</p>
+    </div>
+    <div class="d-feat rv d3">
+      <div class="d-marker"><span class="d-abbr">Pg.</span> Chapter Pages</div>
+      <h3>Student voice as the primary text</h3>
+      <p>Student writing remains the central content. Selected quotations will appear in varied layouts so the pages feel distinct without becoming visually cluttered. Aggregated survey data will be presented typographically rather than through conventional charts.</p>
+    </div>
+    <div class="d-feat rv d4">
+      <div class="d-marker"><span class="d-abbr r">Rd.</span> Red as Signal</div>
+      <h3>Earns its place every time</h3>
+      <p>Red will be used only where emphasis is necessary — the line that carries the most weight, the figure that changes the meaning of the page. Its use will remain limited to preserve clarity and avoid visual overload.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW + STATS -->
+<div class="dark-section" id="preview">
+  <p class="sm rv">05 &nbsp;— &nbsp;Visual Preview</p>
+  <h2 class="rv d1">What a chapter<br><em>actually looks like.</em></h2>
+
+  <div class="mw rv d2">
+    <div class="mw-bar">
+      <div class="mdot r"></div><div class="mdot y"></div><div class="mdot g"></div>
+      <div class="murl">whatwedontsay.mdm.edu.ph/chapters/after</div>
+    </div>
+    <div class="mscreen">
+      <div class="mscreen-bg1"></div><div class="mscreen-bg2"></div><div class="mscreen-bg3"></div>
+      <div class="mscreen-nav">
+        <div class="mn"></div><div class="mn"></div><div class="mn"></div>
+        <div class="mn on"></div><div class="mn"></div><div class="mn"></div>
+      </div>
+      <div class="mscreen-word">After</div>
+      <div class="mscreen-btn">Read Chapter</div>
+    </div>
+    <div class="minner">
+      <p class="mch-lbl">Chapter 04 &nbsp;— &nbsp;After</p>
+      <div class="mquo">
+        <span class="mquo-mark">&ldquo;</span>
+        <p class="mquo-text">"The scariest thought I have about the future is that I will become someone my past self would not recognize."</p>
+        <span class="mquo-attr">Grade 11 Student</span>
+      </div>
+      <div class="stats-row">
+        <div class="stat-blk">
+          <div class="stat-track"><div class="stat-fill" data-w="68"></div></div>
+          <span class="stat-num" data-t="68" data-sx="%">68%</span>
+          <p class="stat-desc">think about the future with more dread than excitement</p>
+        </div>
+        <div class="stat-blk">
+          <div class="stat-track"><div class="stat-fill r" data-w="30"></div></div>
+          <span class="stat-num r">3 in 10</span>
+          <p class="stat-desc">say their biggest fear is disappointing someone</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="sm rv" style="margin-top:72px;margin-bottom:0;">06 &nbsp;— &nbsp;What the data might look like</p>
+  <h2 class="rv d1" style="margin-top:32px;">Numbers as <em>evidence.</em></h2>
+
+  <div class="stat-cells">
+    <div class="stat-cell rv d1">
+      <div class="sc-track"><div class="sc-fill" data-w="68"></div></div>
+      <span class="sc-num bn">68%</span>
+      <p class="sc-lbl">think about the future with more dread than excitement</p>
+    </div>
+    <div class="stat-cell rv d2">
+      <div class="sc-track"><div class="sc-fill r" data-w="42"></div></div>
+      <span class="sc-num rn">4 in 10</span>
+      <p class="sc-lbl">say they have no one they feel safe being fully honest with</p>
+    </div>
+    <div class="stat-cell rv d3">
+      <div class="sc-track"><div class="sc-fill" data-w="55"></div></div>
+      <span class="sc-num bn">55%</span>
+      <p class="sc-lbl">say they show less than half of their real self at school</p>
+    </div>
+  </div>
+
+  <p class="stat-note rv d4">
+    ⚠ Projected figures only. These numbers are included to demonstrate the design treatment and are not real data. Actual values will come from survey responses collected in May 2026. No conclusions should be drawn from these figures.
+  </p>
+</div>
+
+<!-- TIMELINE -->
+<section class="timeline" id="timeline">
+  <p class="sm rv">07 &nbsp;— &nbsp;Timeline</p>
+  <h2 class="rv d1">From survey <em>to publication.</em></h2>
+  <p class="tl-note rv d2">The timeline is built around a realistic approval process and a small student team producing the project from start to finish.</p>
+
+  <div class="tl-wrap">
+    <div class="tl-item rv d1">
+      <div class="tl-date">May 1–9</div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body"><h3>Preparation</h3><p>Survey questions are finalized, with 5–10 questions per chapter (30–60 total). The Google Form is built and tested. Promotional materials are designed, and the proposal letter is completed in preparation for the May 9 meeting.</p></div>
+    </div>
+    <div class="tl-item ms rv d2">
+      <div class="tl-date">May 9<br>Milestone</div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body"><h3>Admin Proposal Meeting</h3><p>The full proposal letter is submitted after the SSC Online Meeting. A separate endorsement letter from the guidance counselor is also submitted. The target is to secure approval within the week so the survey and promotional rollout can proceed before the end of May.</p></div>
+    </div>
+    <div class="tl-item rv d3">
+      <div class="tl-date">May 12–16<br>(est.)</div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body"><h3>Final Preparations, Pending Approval</h3><p>While awaiting approval, final adjustments are made. The Google Form is reviewed and locked, pubmats are finalized, and the rollout plan is coordinated with homeroom teachers.</p></div>
+    </div>
+    <div class="tl-item ms rv d4">
+      <div class="tl-date">May 16<br>Milestone</div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body"><h3>Survey + Pubmat Launch</h3><p>Promotional materials are released through school social media and posted on campus. The survey is distributed through the SSC Instagram account and Google Chat Spaces. A reminder will be sent midway through the collection period.</p></div>
+    </div>
+    <div class="tl-item rv d5">
+      <div class="tl-date">May 16–30</div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body"><h3>Collection Window — Two Weeks</h3><p>The survey remains open for approximately two weeks. The guidance counselor monitors responses throughout this period. The form closes around May 30, and all responses are immediately exported for review.</p></div>
+    </div>
+    <div class="tl-item rv d6">
+      <div class="tl-date">June 1–20</div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body"><h3>Editorial Curation</h3><p>All responses are reviewed by SSC and Montessori Scribes. SSC selects responses for potential inclusion (Pass 1). The Scribes advisor removes or edits any content that could identify a student (Pass 2). Chapter narratives are written and quantitative data is compiled.</p></div>
+    </div>
+    <div class="tl-item rv d1">
+      <div class="tl-date">June 20 –<br>July 10</div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body"><h3>Website Build + Illustrations</h3><p>Final illustrations for all six chapters are completed. The website is built and all content is integrated. A full review is conducted by SSC, the Scribes advisor, and a faculty partner. An admin preview link is sent at least one week before launch.</p></div>
+    </div>
+    <div class="tl-item ms rv d2">
+      <div class="tl-date">Est. mid-July<br>Milestone</div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body"><h3>Public Launch</h3><p>The website is published after receiving admin approval. It is announced through school channels, SSC social media, and Montessori Scribes platforms. QR posters are placed around campus for easy access. The site is made available to all JHS and SHS students.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section class="roles" id="roles">
+  <p class="sm rv">08 &nbsp;— &nbsp;Team &amp; Roles</p>
+  <h2 class="rv d1">Who owns <em>what.</em></h2>
+  <div class="roles-grid">
+    <div class="role-card rv d1">
+      <span class="role-tag">Secondary Student Council</span>
+      <h3>Project Lead</h3>
+      <ul>
+        <li>Project direction</li><li>Admin proposal</li><li>Survey form design</li>
+        <li>Editorial curation, pass 1</li><li>Website build</li><li>Launch coordination</li>
+      </ul>
+    </div>
+    <div class="role-card rv d2">
+      <span class="role-tag">Montessori Scribes</span>
+      <h3>Editorial Partner</h3>
+      <ul>
+        <li>Editorial curation</li><li>Identifiability review</li>
+        <li>Chapter narrative writing</li><li>Advisor sign-off</li><li>Co-promotion</li>
+      </ul>
+    </div>
+    <div class="role-card rv d3">
+      <span class="role-tag">Student Artists — TBD</span>
+      <h3>Illustration</h3>
+      <ul>
+        <li>Six chapter illustrations</li><li>Visual identity</li>
+        <li>QR poster design</li><li>Website visual assets</li><li>Faculty sign-off</li>
+      </ul>
+    </div>
+    <div class="role-card rv d4" style="border-right:none;">
+      <span class="role-tag">Guidance Counselor</span>
+      <h3>Welfare Oversight</h3>
+      <ul>
+        <li>Survey question review</li><li>Safe space messaging</li>
+        <li>Response monitoring</li><li>Endorsement letter</li><li>Crisis referral protocol</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN PITCH -->
+<section class="admin" id="admin">
+  <p class="sm rv">09 &nbsp;— &nbsp;Admin Pitch</p>
+  <h2 class="rv d1">What to say.<br><em>How to say it.</em></h2>
+  <div class="pitch-cols">
+    <div class="pitch-left rv d2">
+      <h3>Context</h3>
+      <p>This section is written for delivery in a scheduled meeting. Read it as a school project with a defined purpose — not as an artistic concept alone.</p>
+    </div>
+    <div class="pitch-text rv d3">
+      <p>We are proposing a student literary and mental health initiative called <strong>What We Don't Say</strong>. The project will begin with an anonymous survey organized around six emotional themes. Responses will be collected through Google Forms in May, curated and edited in June, and published as a website in July.</p>
+      <p>The purpose is to document recurring student concerns in a form that is structured, accessible, and appropriate for a school setting. The final website will present student writing alongside carefully selected quantitative summaries, giving the school a clearer view of what students are carrying and how those concerns appear across the student body.</p>
+      <p>The project model is <em>Inside the Head</em> by Chloé Fleury (2019), an anonymous submission-based website organized into visual chapters. We are adapting the structure, not the content. Our illustrations, editorial voice, and final material will be original to Montessori de Manila.</p>
+      <p>What we're asking for: approval to distribute the survey in May, with the guidance counselor involved throughout, and approval to publish the website in July after a full preview has been submitted for review. The guidance counselor has reviewed the survey direction and is formally supporting the project.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RISK -->
+<section class="risk" id="risk">
+  <p class="sm rv">10 &nbsp;— &nbsp;Risk &amp; Ethics</p>
+  <h2 class="rv d1">We've thought about<br><em>what can go wrong.</em></h2>
+  <div class="risk-grid">
+    <div class="risk-card fl rv d1">
+      <span class="risk-lbl fl">Risk</span>
+      <h3>Mental Health Trigger Risk</h3>
+      <p>Questions about anxiety, loneliness, and family expectations may surface genuine distress. The guidance counselor will maintain read-only access during collection and may initiate follow-up if a response suggests a student is in crisis. A safe-space note will appear at the top and bottom of the form.</p>
+    </div>
+    <div class="risk-card fl rv d2">
+      <span class="risk-lbl fl">Risk</span>
+      <h3>Identifiability Risk</h3>
+      <p>Even anonymous responses can become identifiable if the detail is too specific. The editorial review process exists to prevent this. If a response could reasonably reveal who wrote it, it will not be published.</p>
+    </div>
+    <div class="risk-card fl rv d3">
+      <span class="risk-lbl fl">Risk</span>
+      <h3>Low Participation</h3>
+      <p>If response volume is low, the chapters will not feel complete. To reduce that risk, the rollout will include publication material distribution, a mid-window reminder, and peer promotion through SSC officers.</p>
+    </div>
+    <div class="risk-card ch rv d4">
+      <span class="risk-lbl ch">Mitigation</span>
+      <h3>Approval Risk</h3>
+      <p>The proposal will be submitted early enough for review without pressure. A full preview will be shown before publication, and no public launch will happen without sign-off.</p>
+    </div>
+    <div class="risk-card ch rv d5">
+      <span class="risk-lbl ch">Mitigation</span>
+      <h3>Content Quality Control</h3>
+      <p>All content goes through SSC review, Scribes advisor review, and admin preview. Nothing is published until the full chain is complete.</p>
+    </div>
+    <div class="risk-card ch rv d6">
+      <span class="risk-lbl ch">Mitigation</span>
+      <h3>Long-term Scalability</h3>
+      <p>The structure is designed to last beyond one school year. Future SSC teams can add new chapters or build on the archive, turning the site into a record that grows with the school.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <span class="ft-title">What We<br><em>Don't Say<span class="stop">.</span></em></span>
+    <p class="ft-sub">A student literary and mental health initiative by the MDM Secondary Student Council and Montessori Scribes of Montessori de Manila. SY 2026–2027. Las Piñas City, Philippines.</p>
+  </div>
+  <div class="ft-meta">
+    <p>Project Proposal</p>
+    <p>MDM Secondary Student Council × Montessori Scribes</p>
+    <p>Montessori de Manila</p>
+    <p class="small">Inspired by "Inside the Head" — Chloé Fleury, 2019</p>
+  </div>
+</footer>
+
+<script>
+/* Scroll reveal */
+(function() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold:0.1, rootMargin:'0px 0px -36px 0px' });
+  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+  /* Animate stat bars on scroll */
+  const barObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.querySelectorAll('[data-w]').forEach((bar, i) => {
+        setTimeout(() => { bar.style.width = bar.dataset.w + '%'; }, 250 + i * 120);
+      });
+      barObs.unobserve(e.target);
+    });
+  }, { threshold:0.3 });
+  document.querySelectorAll('.stats-row, .stat-cells').forEach(el => barObs.observe(el));
+})();
+</script>
+</body>
+</html>

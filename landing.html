@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What We Don't Say — Montessori de Manila</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ── RESET ─── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+/* ── VARS ─── */
+:root {
+  --white:  #FAFAF8;
+  --paper:  #F0EDE8;
+  --navy:   #0D1B3E;
+  --blue:   #1D4ED8;
+  --pale:   #DBEAFE;
+  --red:    #C8202A;
+  --ink:    #1C1C1C;
+  --muted:  #6B6B6B;
+  --rule:   #D8D4CA;
+  --ease:   cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ── GRAIN ─── */
+body::before {
+  content:'';
+  position:fixed; inset:-100px;
+  z-index:9990; pointer-events:none; opacity:0.038;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;
+  animation:grain 8s steps(8) infinite;
+}
+@keyframes grain {
+  0%{transform:translate(0,0)} 12%{transform:translate(-3%,-4%)}
+  25%{transform:translate(-8%,3%)} 37%{transform:translate(5%,-6%)}
+  50%{transform:translate(-4%,6%)} 62%{transform:translate(-9%,2%)}
+  75%{transform:translate(7%,-2%)} 87%{transform:translate(2%,5%)}
+}
+
+/* ── CURSOR ─── */
+body.site-loaded { cursor:none; }
+#cursor-dot, #cursor-ring {
+  position:fixed; border-radius:50%;
+  pointer-events:none; z-index:9995;
+  transform:translate(-50%,-50%);
+}
+#cursor-dot {
+  width:5px; height:5px; background:var(--navy);
+  transition:background 0.25s, left 0.02s, top 0.02s;
+  opacity:0;
+}
+#cursor-ring {
+  width:30px; height:30px; border:1.5px solid var(--navy); opacity:0;
+  transition:width 0.4s var(--ease), height 0.4s var(--ease), opacity 0.3s, border-color 0.25s;
+}
+body.site-loaded #cursor-dot  { opacity:1; }
+body.site-loaded #cursor-ring { opacity:0.25; }
+body.site-loaded.c-hover #cursor-ring { width:48px; height:48px; opacity:0.45; }
+
+/* ── BASE ─── */
+body {
+  font-family:'Instrument Sans', sans-serif;
+  background:var(--white); color:var(--ink);
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+
+/* ══ INTRO ══════════════════════════════════ */
+#intro {
+  position:fixed; inset:0; z-index:1000;
+  background:var(--white);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:48px 32px;
+  transition:opacity 0.85s var(--ease);
+}
+#intro.out { opacity:0; pointer-events:none; }
+
+.i-label {
+  position:absolute;
+  font-size:9px; font-weight:600;
+  letter-spacing:3.5px; text-transform:uppercase;
+  color:rgba(13,27,62,0.25); white-space:nowrap;
+}
+.i-label.top { top:34px; left:50%; transform:translateX(-50%); }
+.i-label.btm { bottom:34px; left:50%; transform:translateX(-50%); }
+
+#txt-wrap {
+  max-width:560px; width:100%; text-align:center;
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+}
+
+#txt {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(17px,2.1vw,23px);
+  font-weight:400; line-height:1.95; color:var(--navy);
+  min-height:220px; display:block;
+}
+
+#cur {
+  display:inline-block; width:2px; height:0.88em;
+  background:#C8202A; vertical-align:middle;
+  margin-left:2px; position:relative; top:-0.04em;
+  opacity:1; animation:blink 1s steps(1) infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+#begin-btn {
+  display:none; margin-top:44px;
+  background:transparent; border:1.5px solid rgba(13,27,62,0.2);
+  padding:13px 48px; font-family:'Instrument Sans',sans-serif;
+  font-size:10px; font-weight:600; letter-spacing:4px; text-transform:uppercase;
+  color:rgba(13,27,62,0.4); border-radius:100px; cursor:none;
+  transition:border-color 0.22s, color 0.22s;
+  opacity:0; animation:fadeUp 1.2s var(--ease) 0.1s forwards;
+}
+#begin-btn:hover { border-color:var(--navy); color:var(--navy); }
+
+#start-btn {
+  background:transparent; border:1.5px solid rgba(13,27,62,0.2);
+  padding:13px 48px; font-family:'Instrument Sans',sans-serif;
+  font-size:10px; font-weight:600; letter-spacing:4px; text-transform:uppercase;
+  color:rgba(13,27,62,0.4); border-radius:100px; cursor:none;
+  transition:border-color 0.22s, color 0.22s, opacity 0.5s;
+  opacity:0; animation:fadeUp 1.2s var(--ease) 0.6s forwards;
+}
+#start-btn:hover { border-color:var(--navy); color:var(--navy); }
+#start-btn.hiding { opacity:0 !important; pointer-events:none; }
+
+#skip-btn {
+  position:absolute; bottom:32px; right:44px;
+  background:transparent; border:1px solid rgba(13,27,62,0.13);
+  padding:6px 14px; border-radius:999px; font-family:'Instrument Sans',sans-serif;
+  font-size:9px; letter-spacing:2.5px; text-transform:uppercase;
+  color:rgba(13,27,62,0.28); cursor:none;
+  opacity:0; pointer-events:none;
+  transition:color 0.2s, border-color 0.2s, opacity 0.4s;
+}
+#skip-btn.show { opacity:1; pointer-events:all; }
+#skip-btn:hover { color:rgba(13,27,62,0.55); border-color:rgba(13,27,62,0.35); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(9px)} to{opacity:1;transform:none} }
+
+/* ══ BGM PLAYER ══════════════════════════════ */
+#bgm-widget {
+  position:fixed; bottom:28px; left:28px;
+  z-index:9000; display:flex; flex-direction:column;
+  align-items:flex-start; gap:0; font-family:'Instrument Sans',sans-serif;
+}
+#bgm-panel {
+  background:var(--white); border:1.5px solid rgba(13,27,62,0.14);
+  border-radius:4px; padding:18px 20px 14px; min-width:220px;
+  margin-bottom:10px; box-shadow:0 8px 32px rgba(13,27,62,0.08);
+  transform-origin:bottom left;
+  transform:scale(0.92) translateY(6px); opacity:0; pointer-events:none;
+  transition:transform 0.28s cubic-bezier(0.22,1,0.36,1), opacity 0.22s;
+}
+#bgm-panel.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+.bgm-track-name {
+  font-size:9px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:10px; display:block;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;
+}
+.bgm-progress-wrap {
+  width:100%; height:2px; background:var(--rule); border-radius:999px;
+  margin-bottom:14px; position:relative; overflow:hidden; cursor:pointer;
+}
+.bgm-progress-fill {
+  height:100%; background:var(--navy); border-radius:999px;
+  width:0%; transition:width 0.5s linear; pointer-events:none;
+}
+.bgm-controls { display:flex; align-items:center; gap:12px; }
+.bgm-ctrl-btn {
+  background:none; border:none; cursor:none;
+  color:rgba(13,27,62,0.35); padding:0;
+  transition:color 0.18s; line-height:1; font-size:14px;
+}
+.bgm-ctrl-btn:hover { color:var(--navy); }
+.bgm-vol-wrap { flex:1; display:flex; align-items:center; gap:8px; }
+.bgm-vol {
+  flex:1; -webkit-appearance:none; appearance:none;
+  height:2px; background:var(--rule); border-radius:999px; outline:none; cursor:none;
+}
+.bgm-vol::-webkit-slider-thumb {
+  -webkit-appearance:none; appearance:none;
+  width:10px; height:10px; border-radius:50%; background:var(--navy); cursor:none;
+}
+.bgm-vol-icon { font-size:10px; color:rgba(13,27,62,0.3); }
+.bgm-track-count {
+  font-size:8px; color:rgba(13,27,62,0.2); letter-spacing:1.5px;
+  margin-top:10px; display:block; text-transform:uppercase;
+}
+#bgm-toggle {
+  width:38px; height:38px; border-radius:50%; background:var(--white);
+  border:1.5px solid rgba(13,27,62,0.14); cursor:none;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 16px rgba(13,27,62,0.07); position:relative;
+  transition:border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+#bgm-toggle:hover { border-color:rgba(13,27,62,0.3); box-shadow:0 6px 22px rgba(13,27,62,0.12); }
+#bgm-toggle.playing { background:var(--navy); border-color:var(--navy); }
+#bgm-toggle svg { transition:opacity 0.2s; }
+.bgm-icon-off { opacity:1; }
+.bgm-icon-on  { opacity:0; position:absolute; }
+#bgm-toggle.playing .bgm-icon-off { opacity:0; }
+#bgm-toggle.playing .bgm-icon-on  { opacity:1; }
+#bgm-toggle.loading::after {
+  content:''; position:absolute; inset:0; border-radius:50%;
+  border:1.5px solid transparent; border-top-color:var(--navy);
+  animation:bgm-spin 0.8s linear infinite;
+}
+@keyframes bgm-spin { to{transform:rotate(360deg)} }
+.bgm-eq { display:flex; gap:2px; align-items:flex-end; height:12px; }
+.bgm-eq span {
+  width:2px; border-radius:1px; background:var(--white);
+  animation:bgm-eq-bar 0.8s ease-in-out infinite alternate;
+}
+.bgm-eq span:nth-child(1){height:4px;animation-delay:0s}
+.bgm-eq span:nth-child(2){height:10px;animation-delay:0.15s}
+.bgm-eq span:nth-child(3){height:6px;animation-delay:0.3s}
+.bgm-eq span:nth-child(4){height:9px;animation-delay:0.1s}
+@keyframes bgm-eq-bar { from{transform:scaleY(0.3)} to{transform:scaleY(1)} }
+
+/* ══ MAIN SITE ═══════════════════════════════ */
+#site { display:none; }
+#site.visible { display:block; }
+
+@keyframes revUp {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:none; }
+}
+
+/* ── Header ── */
+header {
+  padding:52px clamp(28px,7vw,96px) 0;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  opacity:0;
+}
+header.in { animation:revUp 0.7s var(--ease) forwards; }
+.h-org {
+  font-size:9.5px; font-weight:600; letter-spacing:3px; text-transform:uppercase;
+  color:var(--muted); line-height:1.6;
+}
+.h-meta {
+  text-align:right; font-size:9.5px; font-weight:500;
+  letter-spacing:2px; text-transform:uppercase; color:var(--muted); line-height:1.6;
+}
+
+/* ── Hero ── */
+.hero {
+  padding:64px clamp(28px,7vw,96px) 44px;
+  display:grid; grid-template-columns:1fr auto;
+  align-items:end; gap:48px; border-bottom:2px solid var(--navy);
+  opacity:0;
+}
+.hero.in { animation:revUp 0.75s var(--ease) 0.07s forwards; }
+.hero-label { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+.hero-label-line { width:32px; height:2px; background:var(--red); }
+.hero-label span {
+  font-size:9px; font-weight:700; letter-spacing:4px;
+  text-transform:uppercase; color:var(--red);
+}
+h1 {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(52px,8.5vw,124px); font-weight:900;
+  line-height:0.88; letter-spacing:-3px; color:var(--navy);
+}
+h1 em { font-style:italic; color:var(--blue); display:block; }
+.hero-sub { margin-top:32px; font-size:15px; line-height:1.8; color:var(--muted); max-width:480px; }
+.hero-right { text-align:right; padding-bottom:6px; }
+.hero-count {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(80px,10vw,140px); font-weight:900; line-height:1;
+  letter-spacing:-4px; color:var(--paper); display:block; user-select:none;
+  border:2px solid var(--rule); padding:16px 28px;
+}
+.hero-count-label {
+  font-size:9px; font-weight:600; letter-spacing:3px; text-transform:uppercase;
+  color:var(--muted); display:block; margin-top:10px; text-align:right;
+}
+
+/* ── Chapter Grid ── */
+.chapters { display:grid; grid-template-columns:1fr 1fr; }
+.ch {
+  padding:48px clamp(28px,5vw,64px);
+  border-bottom:2px solid var(--navy); border-right:2px solid var(--navy);
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column; min-height:340px;
+  text-decoration:none; color:inherit; cursor:none;
+  opacity:0;
+}
+.ch.in { animation:revUp 0.65s var(--ease) forwards; }
+.ch:nth-child(even) { border-right:none; }
+.ch:nth-last-child(-n+2) { border-bottom:none; }
+.ch::before {
+  content:''; position:absolute; inset:0;
+  transform:scaleY(0); transform-origin:bottom;
+  transition:transform 0.5s var(--ease); z-index:0;
+}
+.ch.blue::before { background:var(--blue); }
+.ch.red::before  { background:var(--red); }
+.ch:hover::before { transform:scaleY(1); }
+.ch > * { position:relative; z-index:1; }
+.ch-num {
+  font-size:9px; font-weight:700; letter-spacing:3.5px;
+  text-transform:uppercase; color:var(--muted); display:block;
+  margin-bottom:20px; transition:color 0.3s;
+}
+.ch:hover .ch-num { color:rgba(255,255,255,0.3); }
+.ch-title {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(48px,5.5vw,80px); font-weight:900; line-height:0.9;
+  letter-spacing:-2px; display:block; margin-bottom:22px; transition:color 0.3s;
+}
+.ch.blue .ch-title { color:var(--blue); }
+.ch.red  .ch-title { color:var(--red); }
+.ch:hover .ch-title { color:rgba(255,255,255,0.96); }
+.ch-quote {
+  font-family:'Playfair Display', serif;
+  font-size:13.5px; font-style:italic; color:var(--muted);
+  line-height:1.55; margin-bottom:16px; flex:1; transition:color 0.3s;
+}
+.ch:hover .ch-quote { color:rgba(255,255,255,0.55); }
+.ch-link {
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:9.5px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
+  color:var(--navy); text-decoration:none; margin-top:20px;
+  transition:color 0.3s, gap 0.3s; width:fit-content;
+}
+.ch:hover .ch-link { color:rgba(255,255,255,0.7); gap:16px; }
+.ch-link-arrow {
+  display:inline-block; width:20px; height:1.5px;
+  background:currentColor; position:relative; transition:width 0.3s;
+}
+.ch-link-arrow::after {
+  content:''; position:absolute; right:0; top:50%;
+  transform:translateY(-50%) rotate(45deg);
+  width:5px; height:5px;
+  border-right:1.5px solid currentColor; border-top:1.5px solid currentColor;
+}
+.ch:hover .ch-link-arrow { width:28px; }
+
+/* ── Site Bar ── */
+.site-bar {
+  background:var(--navy); padding:20px clamp(28px,7vw,96px);
+  display:flex; justify-content:space-between; align-items:center; gap:24px;
+  opacity:0;
+}
+.site-bar.in { animation:revUp 0.65s var(--ease) forwards; }
+.site-bar p {
+  font-size:10px; font-weight:500; letter-spacing:2px;
+  text-transform:uppercase; color:rgba(255,255,255,0.3);
+}
+.site-bar a {
+  font-size:10px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase;
+  color:rgba(255,255,255,0.5); text-decoration:none;
+  border:1px solid rgba(255,255,255,0.12); padding:8px 18px; border-radius:999px;
+  transition:color 0.2s, border-color 0.2s; cursor:none;
+}
+.site-bar a:hover { color:#fff; border-color:rgba(255,255,255,0.35); }
+
+/* ── Footer ── */
+footer {
+  padding:clamp(44px,6vw,72px) clamp(28px,7vw,96px);
+  border-top:2px solid var(--navy);
+  display:flex; justify-content:space-between; align-items:flex-end; gap:32px;
+  opacity:0;
+}
+footer.in { animation:revUp 0.65s var(--ease) forwards; }
+.ft-title {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(22px,3vw,38px); font-weight:900;
+  letter-spacing:-1px; color:var(--navy); line-height:1;
+  display:block; margin-bottom:12px;
+}
+.ft-title em { font-style:italic; color:var(--blue); }
+.ft-copy { font-size:11.5px; color:var(--muted); line-height:1.7; max-width:360px; }
+.ft-right { text-align:right; }
+.ft-right p {
+  font-size:9.5px; font-weight:500; letter-spacing:2px;
+  text-transform:uppercase; color:var(--muted); line-height:2.2;
+}
+
+/* ── Responsive ── */
+@media (max-width:800px) {
+  .hero { grid-template-columns:1fr; gap:28px; }
+  .hero-right { display:none; }
+  footer { flex-direction:column; align-items:flex-start; }
+  .ft-right { text-align:left; }
+}
+@media (max-width:640px) {
+  .chapters { grid-template-columns:1fr; }
+  .ch { border-right:none !important; border-bottom:2px solid var(--navy) !important; min-height:auto; }
+  .ch:last-child { border-bottom:none !important; }
+  header { flex-direction:column; gap:6px; }
+  .h-meta { text-align:left; }
+  .site-bar { flex-direction:column; align-items:flex-start; gap:14px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body::before, .bgm-eq span { animation:none; }
+  .ch::before, .ch-title, .ch-quote, .ch-num, .ch-link, .ch-link-arrow { transition:none; }
+}
+
+</style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- BGM Widget -->
+<div id="bgm-widget">
+  <div id="bgm-panel">
+    <span class="bgm-track-name" id="bgm-track-name">Loading tracks…</span>
+    <div class="bgm-progress-wrap" id="bgm-progress-wrap">
+      <div class="bgm-progress-fill" id="bgm-progress-fill"></div>
+    </div>
+    <div class="bgm-controls">
+      <button class="bgm-ctrl-btn" id="bgm-prev">&#8592;</button>
+      <button class="bgm-ctrl-btn" id="bgm-playpause">&#9646;&#9646;</button>
+      <button class="bgm-ctrl-btn" id="bgm-next">&#8594;</button>
+      <div class="bgm-vol-wrap">
+        <span class="bgm-vol-icon">&#9834;</span>
+        <input type="range" class="bgm-vol" id="bgm-vol" min="0" max="1" step="0.01" value="0.5">
+      </div>
+    </div>
+    <span class="bgm-track-count" id="bgm-track-count"></span>
+  </div>
+  <button id="bgm-toggle">
+    <svg class="bgm-icon-off" width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M5 10.5V3.5L12 2V9" stroke="#0D1B3E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="3.5" cy="10.5" r="1.5" stroke="#0D1B3E" stroke-width="1.4"/>
+      <circle cx="10.5" cy="9" r="1.5" stroke="#0D1B3E" stroke-width="1.4"/>
+    </svg>
+    <div class="bgm-eq bgm-icon-on">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </button>
+</div>
+
+<!-- INTRO OVERLAY -->
+<div id="intro">
+  <p class="i-label top">May · Mental Health Awareness Month · Montessori de Manila</p>
+  <div id="txt-wrap" style="opacity:0;pointer-events:none;">
+    <div id="txt"><span id="cur"></span></div>
+    <button id="begin-btn" onclick="enterSite()">Enter &nbsp;&rarr;</button>
+  </div>
+  <button id="start-btn">Begin &nbsp;&rarr;</button>
+  <button id="skip-btn" onclick="skipAnim()">Skip</button>
+  <p class="i-label btm">What We Don't Say · SY 2026–2027</p>
+</div>
+
+<!-- MAIN SITE -->
+<div id="site">
+
+  <header id="hdr">
+    <div class="h-org">
+      MDM Secondary Student Council × Montessorian Scribes<br>
+      Montessori de Manila · Las Piñas City
+    </div>
+    <div class="h-meta">
+      SY 2026–2027<br>
+      Mental Health Initiative
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="hero-left">
+      <div class="hero-label">
+        <div class="hero-label-line"></div>
+        <span>Student Literary &amp; Mental Health Initiative</span>
+      </div>
+      <h1>What We<br><em>Don't Say.</em></h1>
+      <p class="hero-sub">An anonymous student survey across six emotional themes — compiled into a curated literary record of what it actually feels like to be a student here.</p>
+    </div>
+    <div class="hero-right">
+      <span class="hero-count">06</span>
+      <span class="hero-count-label">Chapters</span>
+    </div>
+  </section>
+
+  <div class="chapters">
+
+    <a class="ch blue" href="/chapters/pressure">
+      <span class="ch-num">Chapter 01</span>
+      <span class="ch-title">Pressure</span>
+      <p class="ch-quote">"I was okay with my grades until I heard what everyone else got."</p>
+      <span class="ch-link">Read Chapter <span class="ch-link-arrow"></span></span>
+    </a>
+
+    <a class="ch red" href="/chapters/home">
+      <span class="ch-num">Chapter 02</span>
+      <span class="ch-title">Home</span>
+      <p class="ch-quote">"They don't say anything when I mess up, but I can tell they expected better."</p>
+      <span class="ch-link">Read Chapter <span class="ch-link-arrow"></span></span>
+    </a>
+
+    <a class="ch blue" href="/chapters/longing">
+      <span class="ch-num">Chapter 03</span>
+      <span class="ch-title">Longing</span>
+      <p class="ch-quote">"I typed it out three times and still didn't send it."</p>
+      <span class="ch-link">Read Chapter <span class="ch-link-arrow"></span></span>
+    </a>
+
+    <a class="ch red" href="/chapters/after">
+      <span class="ch-num">Chapter 04</span>
+      <span class="ch-title">After</span>
+      <p class="ch-quote">"Everyone keeps asking what course I'm taking. I don't even know what I'm good at."</p>
+      <span class="ch-link">Read Chapter <span class="ch-link-arrow"></span></span>
+    </a>
+
+    <a class="ch blue" href="/chapters/self">
+      <span class="ch-num">Chapter 05</span>
+      <span class="ch-title">Self</span>
+      <p class="ch-quote">"I act different depending on who I'm with, and I don't know which one people think is me."</p>
+      <span class="ch-link">Read Chapter <span class="ch-link-arrow"></span></span>
+    </a>
+
+    <a class="ch red" href="/chapters/alone">
+      <span class="ch-num">Chapter 06</span>
+      <span class="ch-title">Alone</span>
+      <p class="ch-quote">"I'm always with people, but I still feel like I don't belong anywhere."</p>
+      <span class="ch-link">Read Chapter <span class="ch-link-arrow"></span></span>
+    </a>
+
+  </div>
+
+  <div class="site-bar" id="site-bar">
+    <p>If anything here stays with you — the guidance office is open.</p>
+    <a href="/about">About this project</a>
+  </div>
+
+  <footer id="footer">
+    <div>
+      <span class="ft-title">What We <em>Don't Say.</em></span>
+      <p class="ft-copy">A student literary and mental health initiative by the MDM Secondary Student Council and Montessorian Scribes. All submissions are anonymous. Survey responses were collected in May 2026 and reviewed by the guidance counselor before publication.</p>
+    </div>
+    <div class="ft-right">
+      <p>MDM Secondary Student Council</p>
+      <p>Montessorian Scribes</p>
+      <p>SY 2026–2027</p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* ══ CONFIG ══════════════════════════════════ */
+const BGM_GITHUB_OWNER = 'montessoridemanila';
+const BGM_GITHUB_REPO  = 'whatwedontsay-pitch';
+const BGM_GITHUB_PATH  = 'music';
+const BGM_BRANCH       = 'main';
+
+/* ══ AUDIO ENGINE ════════════════════════════ */
+let audioCtx = null, reverbNode = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function getReverb() {
+  if (reverbNode) return reverbNode;
+  const ctx = getAudioCtx();
+  const len = Math.floor(ctx.sampleRate * 0.38);
+  const ir  = ctx.createBuffer(2, len, ctx.sampleRate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = ir.getChannelData(ch);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.4);
+  }
+  const conv = ctx.createConvolver(); conv.buffer = ir;
+  const wet = ctx.createGain(); wet.gain.value = 0.18;
+  const dry = ctx.createGain(); dry.gain.value = 1;
+  const out = ctx.createGain(); out.gain.value = 1;
+  conv.connect(wet); wet.connect(out); out.connect(ctx.destination);
+  reverbNode = { input:conv, dry, out, ctx };
+  dry.connect(out);
+  return reverbNode;
+}
+
+function routeToOutput(node) {
+  const ctx = getAudioCtx(), rv = getReverb();
+  const lp  = ctx.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = 1100; lp.Q.value = 0.5;
+  node.connect(lp); lp.connect(rv.input); lp.connect(rv.dry);
+}
+
+function playKeyClick(char) {
+  try {
+    const ctx = getAudioCtx(), now = ctx.currentTime;
+    const bufLen = Math.floor(ctx.sampleRate * 0.048);
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    const isSpace = char === ' ', isPunct = '.!?,;:—\u2014\u2019\u201c\u201d'.includes(char), isCap = /[A-Z]/.test(char);
+    for (let i = 0; i < bufLen; i++) data[i] = (Math.random()*2-1) * Math.exp(-i/(ctx.sampleRate*(isSpace?.006:isPunct?.009:.007)));
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass'; bp.frequency.value = isSpace?480:isCap?1600:isPunct?1200:1400; bp.Q.value = isSpace?1.1:0.7;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(isSpace?.042:isPunct?.051:.045, now+.002);
+    g.gain.exponentialRampToValueAtTime(.0001, now+.045);
+    src.connect(bp); bp.connect(g); routeToOutput(g);
+    src.start(now); src.stop(now+.05);
+  } catch(e) {}
+}
+
+function playUIClick(type='soft') {
+  try {
+    const ctx = getAudioCtx(), now = ctx.currentTime;
+    const bufLen = Math.floor(ctx.sampleRate*.022);
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) data[i] = (Math.random()*2-1) * Math.exp(-i/(ctx.sampleRate*.003));
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=type==='nav'?900:1400; bp.Q.value=1;
+    const g = ctx.createGain(); g.gain.setValueAtTime(type==='nav'?.033:.039, now); g.gain.exponentialRampToValueAtTime(.0001, now+.022);
+    src.connect(bp); bp.connect(g); routeToOutput(g);
+    src.start(now); src.stop(now+.025);
+  } catch(e) {}
+}
+
+let lastScrollSoundAt = 0;
+function playScrollTick() {
+  try {
+    const now = performance.now();
+    if (now - lastScrollSoundAt < 38) return;
+    lastScrollSoundAt = now;
+    const ctx = getAudioCtx(), t = ctx.currentTime;
+    const bufLen = Math.floor(ctx.sampleRate*.018);
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) data[i] = (Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*.002));
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=600; bp.Q.value=2;
+    const g = ctx.createGain(); g.gain.setValueAtTime(.06, t); g.gain.exponentialRampToValueAtTime(.0001, t+.018);
+    src.connect(bp); bp.connect(g); routeToOutput(g);
+    src.start(t); src.stop(t+.02);
+  } catch(e) {}
+}
+
+let hoverCooldown = false;
+function playHoverBlip() {
+  if (hoverCooldown) return;
+  hoverCooldown = true; setTimeout(()=>hoverCooldown=false, 120);
+  try {
+    const ctx = getAudioCtx(), t = ctx.currentTime;
+    const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate*.055), ctx.sampleRate);
+    const d   = buf.getChannelData(0);
+    for (let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*.009));
+    const thud = ctx.createBufferSource(); thud.buffer=buf;
+    const thudBp=ctx.createBiquadFilter(); thudBp.type='bandpass'; thudBp.frequency.value=320; thudBp.Q.value=1.6;
+    const thudG=ctx.createGain(); thudG.gain.setValueAtTime(.022,t); thudG.gain.exponentialRampToValueAtTime(.0001,t+.055);
+    thud.connect(thudBp); thudBp.connect(thudG); routeToOutput(thudG);
+    const buf2=ctx.createBuffer(1,Math.floor(ctx.sampleRate*.012),ctx.sampleRate);
+    const d2=buf2.getChannelData(0);
+    for(let i=0;i<d2.length;i++) d2[i]=(Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*.0018));
+    const snap=ctx.createBufferSource(); snap.buffer=buf2;
+    const snapBp=ctx.createBiquadFilter(); snapBp.type='bandpass'; snapBp.frequency.value=2800; snapBp.Q.value=0.9;
+    const snapG=ctx.createGain(); snapG.gain.setValueAtTime(.013,t+.008); snapG.gain.exponentialRampToValueAtTime(.0001,t+.022);
+    snap.connect(snapBp); snapBp.connect(snapG); routeToOutput(snapG);
+    thud.start(t); thud.stop(t+.06);
+    snap.start(t+.008); snap.stop(t+.025);
+  } catch(e) {}
+}
+
+/* ══ BGM ═════════════════════════════════════ */
+const bgmAudio = new Audio();
+bgmAudio.volume = 0.5; bgmAudio.crossOrigin = 'anonymous';
+let bgmAudioCtx=null, bgmSource=null, bgmGainNode=null, bgmComp=null;
+const BGM_TARGET_VOL = 0.05;
+
+function getBgmGraph() {
+  if (bgmGainNode) return bgmGainNode;
+  bgmAudioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  bgmSource   = bgmAudioCtx.createMediaElementSource(bgmAudio);
+  bgmComp     = bgmAudioCtx.createDynamicsCompressor();
+  bgmComp.threshold.value=-18; bgmComp.knee.value=8;
+  bgmComp.ratio.value=6; bgmComp.attack.value=.004; bgmComp.release.value=.18;
+  bgmGainNode = bgmAudioCtx.createGain(); bgmGainNode.gain.value=0;
+  bgmSource.connect(bgmComp); bgmComp.connect(bgmGainNode); bgmGainNode.connect(bgmAudioCtx.destination);
+  return bgmGainNode;
+}
+
+let bgmTracks=[], bgmIdx=0, bgmReady=false, bgmPanelOpen=false, bgmPlaying=false, bgmShouldPlay=false;
+
+const bgmToggle   = document.getElementById('bgm-toggle');
+const bgmPanel    = document.getElementById('bgm-panel');
+const bgmTrackName= document.getElementById('bgm-track-name');
+const bgmCount    = document.getElementById('bgm-track-count');
+const bgmFill     = document.getElementById('bgm-progress-fill');
+const bgmVol      = document.getElementById('bgm-vol');
+const bgmPlayPause= document.getElementById('bgm-playpause');
+
+function shuffle(arr) {
+  for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr;
+}
+function bgmParts(url) {
+  const raw = decodeURIComponent(url.split('/').pop().replace(/\.[^.]+$/,'')).replace(/_/g,' ').trim();
+  const m   = raw.match(/^(.*?)\s*-\s*(.*?)$/);
+  return m ? {title:m[1].trim(),artist:m[2].trim()} : {title:raw,artist:''};
+}
+function bgmDisplayName(url) { const {title,artist}=bgmParts(url); return artist?`${title} - ${artist}`:title; }
+function bgmIsRoh(url) { const {title}=bgmParts(url); return /^roh$/i.test(title)||/^roh\b/i.test(title); }
+
+async function bgmFetchTracks() {
+  bgmToggle.classList.add('loading');
+  try {
+    const api = `https://api.github.com/repos/${BGM_GITHUB_OWNER}/${BGM_GITHUB_REPO}/contents/${BGM_GITHUB_PATH}?ref=${BGM_BRANCH}`;
+    const res = await fetch(api); if (!res.ok) throw new Error('GitHub API ' + res.status);
+    const files = await res.json();
+    const all = files.filter(f=>f.type==='file'&&/\.(mp3|ogg|wav|flac)$/i.test(f.name)).map(f=>f.download_url);
+    if (!all.length) throw new Error('No audio files found.');
+    const roh  = all.find(bgmIsRoh);
+    const rest = shuffle(all.filter(u=>u!==roh));
+    bgmTracks  = roh ? [roh,...rest] : shuffle(all);
+    bgmIdx=0; bgmReady=true;
+    bgmCount.textContent=`${bgmTracks.length} track${bgmTracks.length>1?'s':''}`;
+    bgmLoadTrack(0);
+    if (bgmShouldPlay) bgmPlay();
+  } catch(err) {
+    bgmTrackName.textContent='Could not load tracks';
+    bgmCount.textContent=err.message;
+  } finally { bgmToggle.classList.remove('loading'); }
+}
+
+function bgmLoadTrack(i) {
+  bgmAudio.src=bgmTracks[i]; bgmTrackName.textContent=bgmDisplayName(bgmTracks[i]); bgmFill.style.width='0%';
+  if (bgmPlaying) bgmAudio.play().catch(()=>{});
+}
+function bgmPlay() {
+  bgmPlaying=true; const g=getBgmGraph();
+  if (bgmAudioCtx.state==='suspended') bgmAudioCtx.resume();
+  bgmAudio.play().catch(()=>{});
+  g.gain.cancelScheduledValues(bgmAudioCtx.currentTime);
+  g.gain.setValueAtTime(g.gain.value,bgmAudioCtx.currentTime);
+  g.gain.linearRampToValueAtTime(BGM_TARGET_VOL,bgmAudioCtx.currentTime+3);
+  bgmToggle.classList.add('playing'); bgmPlayPause.innerHTML='&#9646;&#9646;';
+}
+function bgmPause() {
+  bgmPlaying=false; const g=getBgmGraph();
+  g.gain.cancelScheduledValues(bgmAudioCtx.currentTime);
+  g.gain.setValueAtTime(g.gain.value,bgmAudioCtx.currentTime);
+  g.gain.linearRampToValueAtTime(0,bgmAudioCtx.currentTime+0.8);
+  setTimeout(()=>bgmAudio.pause(),820);
+  bgmToggle.classList.remove('playing'); bgmPlayPause.innerHTML='&#9654;';
+}
+
+bgmAudio.addEventListener('ended',()=>{ bgmIdx=(bgmIdx+1)%bgmTracks.length; bgmLoadTrack(bgmIdx); });
+bgmAudio.addEventListener('timeupdate',()=>{ if(bgmAudio.duration) bgmFill.style.width=(bgmAudio.currentTime/bgmAudio.duration*100)+'%'; });
+document.getElementById('bgm-progress-wrap').addEventListener('click',e=>{
+  if (!bgmAudio.duration) return;
+  const r=e.currentTarget.getBoundingClientRect();
+  bgmAudio.currentTime=((e.clientX-r.left)/r.width)*bgmAudio.duration;
+});
+bgmVol.addEventListener('input',()=>{
+  const g=getBgmGraph();
+  g.gain.cancelScheduledValues(bgmAudioCtx.currentTime);
+  g.gain.setValueAtTime(parseFloat(bgmVol.value)*BGM_TARGET_VOL*20,bgmAudioCtx.currentTime);
+});
+bgmPlayPause.addEventListener('click',()=>{ playUIClick('soft'); bgmPlaying?bgmPause():bgmPlay(); });
+document.getElementById('bgm-prev').addEventListener('click',()=>{ playUIClick('soft'); bgmIdx=(bgmIdx-1+bgmTracks.length)%bgmTracks.length; bgmLoadTrack(bgmIdx); });
+document.getElementById('bgm-next').addEventListener('click',()=>{ playUIClick('soft'); bgmIdx=(bgmIdx+1)%bgmTracks.length; bgmLoadTrack(bgmIdx); });
+bgmToggle.addEventListener('click',()=>{
+  playUIClick('nav'); bgmPanelOpen=!bgmPanelOpen;
+  bgmPanel.classList.toggle('open',bgmPanelOpen);
+  if (bgmPanelOpen&&!bgmPlaying&&bgmShouldPlay) bgmPlay();
+});
+
+bgmFetchTracks();
+
+/* ══ INTRO TYPEWRITER ════════════════════════ */
+const txt      = document.getElementById('txt');
+const cur      = document.getElementById('cur');
+const beginBtn = document.getElementById('begin-btn');
+const skipBtn  = document.getElementById('skip-btn');
+const startBtn = document.getElementById('start-btn');
+const txtWrap  = document.getElementById('txt-wrap');
+let span=null, sIdx=0, cIdx=0, tmr=null, bold=false, italic=false;
+
+document.body.style.overflow='hidden';
+
+function startIntro() {
+  const ctx=getAudioCtx(); if (ctx.state==='suspended') ctx.resume();
+  playUIClick('soft');
+  startBtn.classList.add('hiding');
+  setTimeout(()=>{
+    startBtn.style.display='none';
+    txtWrap.style.transition='opacity 0.5s'; txtWrap.style.opacity='1'; txtWrap.style.pointerEvents='all';
+    setTimeout(()=>skipBtn.classList.add('show'),3000);
+    tmr=setTimeout(step,480);
+  },400);
+}
+startBtn.addEventListener('click',startIntro);
+
+function charDelay(text,i) {
+  const c=text[i],p=i>0?text[i-1]:'',n=i<text.length-1?text[i+1]:'';
+  let d=40+Math.random()*18;
+  if('.!?'.includes(c)&&(!n||n===' '))d+=80+Math.random()*60;
+  if('.!?'.includes(p)&&c===' ')d+=400+Math.random()*160;
+  if(p===','&&c===' ')d+=130+Math.random()*80;
+  if(c==='\u2014')d+=160+Math.random()*80;
+  if(c===',')d+=20+Math.random()*14;
+  if(/[A-Z]/.test(c))d+=14+Math.random()*12;
+  if(Math.random()<.14)d*=.32;
+  if(Math.random()<.05)d+=90+Math.random()*70;
+  return Math.max(15,Math.round(d));
+}
+
+const sc=[
+  {t:'pause',ms:700},
+  {t:'type',text:'Every school year has two records.'},
+  {t:'pause',ms:1100},{t:'br'},{t:'br'},
+  {t:'type',text:'The official one goes in the yearbook.'},
+  {t:'pause',ms:700},{t:'br'},
+  {t:'type',text:'Events, photos, the things worth saying out loud.'},
+  {t:'pause',ms:900},{t:'br'},{t:'br'},
+  {t:'type',text:'The other one stays with you.'},
+  {t:'pause',ms:700},{t:'br'},
+  {t:'type',text:'The things that almost got said.'},
+  {t:'pause',ms:1300},{t:'br'},{t:'br'},
+  {t:'type',text:'This is an attempt at the second kind.'},
+  {t:'pause',ms:1400},{t:'br'},{t:'br'},
+  {t:'type',text:'From the SSC and the Montessorian Scribes\u2009\u2014'},{t:'br'},
+  {t:'type',text:'to everyone carrying something they haven\u2019t said yet:'},
+  {t:'pause',ms:500},{t:'br'},
+  {t:'type',text:'This is '},
+  {t:'bold',on:true},
+  {t:'type',text:'What We Don\u2019t Say'},
+  {t:'bold',on:false},
+  {t:'type',text:'.'},
+  {t:'pause',ms:2400},{t:'done'},
+];
+
+function mkSpan() {
+  const s=document.createElement('span');
+  s.style.color='#0D1B3E';
+  if(bold)s.style.fontWeight='700';
+  if(italic)s.style.fontStyle='italic';
+  txt.insertBefore(s,cur); span=s;
+}
+
+function step() {
+  if(sIdx>=sc.length)return;
+  const st=sc[sIdx];
+  if(st.t==='pause'){sIdx++;tmr=setTimeout(step,st.ms);return;}
+  if(st.t==='br'){txt.insertBefore(document.createElement('br'),cur);span=null;sIdx++;tmr=setTimeout(step,0);return;}
+  if(st.t==='bold'){bold=st.on;span=null;sIdx++;tmr=setTimeout(step,0);return;}
+  if(st.t==='italic'){italic=st.on;span=null;sIdx++;tmr=setTimeout(step,0);return;}
+  if(st.t==='done'){finish();return;}
+  if(st.t==='type'){
+    if(!span){mkSpan();cIdx=0;}
+    if(cIdx<st.text.length){
+      const ch=st.text[cIdx];
+      span.textContent+=ch;
+      playKeyClick(ch);
+      if(cIdx===0&&st.text==='What We Don\u2019t Say'&&!bgmShouldPlay){
+        bgmShouldPlay=true; bgmPanelOpen=true;
+        bgmPanel.classList.add('open');
+        if(bgmReady)bgmPlay();
+      }
+      tmr=setTimeout(step,charDelay(st.text,cIdx));
+      cIdx++;
+    } else {cIdx=0;span=null;sIdx++;tmr=setTimeout(step,0);}
+  }
+}
+
+function finish() {
+  cur.style.display='none';
+  beginBtn.style.display='inline-block';
+  skipBtn.classList.remove('show');
+}
+
+function enterSite() {
+  const ov=document.getElementById('intro');
+  document.documentElement.style.scrollBehavior='auto';
+  window.scrollTo(0,0);
+  ov.classList.add('out');
+  document.body.classList.add('site-loaded');
+  setTimeout(()=>{
+    ov.style.display='none';
+    document.body.style.overflow='';
+    window.scrollTo(0,0);
+    document.documentElement.style.scrollBehavior='';
+    boot();
+  },860);
+}
+
+function skipAnim() {
+  if(tmr)clearTimeout(tmr);
+  const ctx=getAudioCtx(); if(ctx.state==='suspended')ctx.resume();
+  enterSite();
+}
+
+/* ══ BOOT ════════════════════════════════════ */
+function boot() {
+  document.getElementById('site').classList.add('visible');
+
+  // Staggered reveals
+  setTimeout(()=>document.getElementById('hdr').classList.add('in'),0);
+  setTimeout(()=>document.getElementById('hero').classList.add('in'),70);
+  document.querySelectorAll('.ch').forEach((c,i)=>setTimeout(()=>c.classList.add('in'),160+i*55));
+  setTimeout(()=>document.getElementById('site-bar').classList.add('in'),520);
+  setTimeout(()=>document.getElementById('footer').classList.add('in'),580);
+
+  // Cursor
+  const dot=document.getElementById('cursor-dot'), ring=document.getElementById('cursor-ring');
+  let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    dot.style.left=mx+'px';dot.style.top=my+'px';
+  });
+  (function raf(){
+    rx+=(mx-rx)*.13;ry+=(my-ry)*.13;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(raf);
+  })();
+  document.querySelectorAll('a,button,.ch').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ document.body.classList.add('c-hover'); playHoverBlip(); });
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('c-hover'));
+  });
+
+  // Scroll ticks
+  window.addEventListener('scroll',playScrollTick,{passive:true});
+}
+</script>
+</body>
+</html>
