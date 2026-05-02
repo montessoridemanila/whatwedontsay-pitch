@@ -1748,7 +1748,7 @@ function playCounterTick() {
    shuffles, streams via <audio>, cycles.
 ══════════════════════════════════════════ */
 const bgmAudio    = new Audio();
-bgmAudio.volume   = 1;          // actual level controlled by bgmGainNode below
+bgmAudio.volume   = 0.5;          // actual level controlled by bgmGainNode below
 bgmAudio.crossOrigin = 'anonymous';
 
 // Web Audio graph for BGM: source → compressor → gain → destination
@@ -1802,9 +1802,30 @@ function shuffle(arr) {
   return arr;
 }
 
-function bgmFileName(url) {
-  const name = decodeURIComponent(url.split('/').pop().replace(/\.[^.]+$/, ''));
-  return name.replace(/[-_]/g, ' ');
+function bgmRawName(url) {
+  return decodeURIComponent(url.split('/').pop().replace(/\.[^.]+$/, ''));
+}
+
+function bgmParts(url) {
+  const raw = bgmRawName(url).replace(/_/g, ' ').trim();
+  const m = raw.match(/^(.*?)\s*-\s*(.*?)$/);
+  if (m) {
+    return {
+      title: m[1].trim(),
+      artist: m[2].trim(),
+    };
+  }
+  return { title: raw, artist: '' };
+}
+
+function bgmDisplayName(url) {
+  const { title, artist } = bgmParts(url);
+  return artist ? `${title} - ${artist}` : title;
+}
+
+function bgmIsRoh(url) {
+  const { title } = bgmParts(url);
+  return /^roh$/i.test(title) || /^roh\b/i.test(title);
 }
 
 async function bgmFetchTracks() {
@@ -1814,12 +1835,18 @@ async function bgmFetchTracks() {
     const res = await fetch(api);
     if (!res.ok) throw new Error('GitHub API error ' + res.status);
     const files = await res.json();
-    bgmTracks = shuffle(
-      files
-        .filter(f => f.type === 'file' && /\.(mp3|ogg|wav|flac)$/i.test(f.name))
-        .map(f => f.download_url)
-    );
-    if (!bgmTracks.length) throw new Error('No audio files found in that folder.');
+    const allTracks = files
+      .filter(f => f.type === 'file' && /\.(mp3|ogg|wav|flac)$/i.test(f.name))
+      .map(f => f.download_url);
+
+    if (!allTracks.length) throw new Error('No audio files found in that folder.');
+
+    const rohTrack = allTracks.find(bgmIsRoh);
+    const restTracks = shuffle(allTracks.filter(url => url !== rohTrack));
+
+    bgmTracks = rohTrack ? [rohTrack, ...restTracks] : shuffle(allTracks);
+    bgmIdx = 0;
+
     bgmReady = true;
     bgmCount.textContent = `${bgmTracks.length} track${bgmTracks.length > 1 ? 's' : ''}`;
     bgmLoadTrack(bgmIdx);
@@ -1835,7 +1862,7 @@ async function bgmFetchTracks() {
 
 function bgmLoadTrack(i) {
   bgmAudio.src = bgmTracks[i];
-  bgmTrackName.textContent = bgmFileName(bgmTracks[i]);
+  bgmTrackName.textContent = bgmDisplayName(bgmTracks[i]);
   bgmFill.style.width = '0%';
   if (bgmPlaying) bgmAudio.play().catch(() => {});
 }
