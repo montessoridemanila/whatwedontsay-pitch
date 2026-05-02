@@ -211,7 +211,7 @@ body.nav-inv .fn::after { color:#fff; }
   transition:color 0.2s, border-color 0.2s, opacity 0.4s;
 }
 #skip-btn.show { opacity:1; pointer-events:all; }
-#skip-btn:hover { color:rgba(13,27,62,0.55); border-color:rgba(13,27,62,0.35); }
+#skip-btn:hover { color:rgba(13,27,62,0.55); border-color:rgba(13,27,62,); }
 
 @keyframes fadeUp { from{opacity:0;transform:translateY(9px)} to{opacity:1;transform:none} }
 
@@ -870,7 +870,7 @@ footer::after {
 }
 .bgm-ctrl-btn {
   background:none; border:none; cursor:none;
-  color:rgba(13,27,62,0.35); padding:0;
+  color:rgba(13,27,62,); padding:0;
   transition:color 0.18s; line-height:1;
   font-size:14px;
 }
@@ -972,7 +972,7 @@ footer::after {
       <button class="bgm-ctrl-btn" id="bgm-next" title="Next">&#8594;</button>
       <div class="bgm-vol-wrap">
         <span class="bgm-vol-icon">&#9834;</span>
-        <input type="range" class="bgm-vol" id="bgm-vol" min="0" max="1" step="0.01" value="0.35">
+        <input type="range" class="bgm-vol" id="bgm-vol" min="0" max="1" step="0.01" value="0.20">
       </div>
     </div>
     <span class="bgm-track-count" id="bgm-track-count"></span>
@@ -1692,7 +1692,7 @@ function playHoverBlip() {
     mod.type   = 'sine';
     mod.frequency.value = 180;
     const modGain = ctx.createGain();
-    modGain.gain.value = 90;
+    modGain.gain.value = 20;
     mod.connect(modGain); modGain.connect(osc.frequency);
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0, t);
